@@ -1,13 +1,9 @@
-#build stage
-FROM node:22-alpine AS build
+FROM node:22-alpine
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
-COPY . . 
-RUN npm run build
+COPY . .
 
-#Serve với Nginx
-FROM nginx:stable-alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 5173
+#--host để Docker có thể ánh xạ cổng ra ngoài máy thật
+CMD ["npm", "run", "dev", "--", "--host"]

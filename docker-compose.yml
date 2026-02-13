@@ -7,8 +7,15 @@ services:
       - ./backend/.env
 
   frontend:
-    build: ./frontend
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile # trỏ vào file dev vừa tạo
     ports:
-      - "8080:80"
+      - "8081:5173"
+    volumes:
+      - ./frontend:/app # gắn folder code máy thật vào container
+      - /app/node_modules # tránh build lại node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true # khắc phục vấn đề khi thay đổi file trong container
     depends_on:
       - backend
